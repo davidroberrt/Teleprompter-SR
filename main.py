@@ -2,12 +2,12 @@ import speech_recognition as sr
 
 def listen_for_speech(recognizer, microphone):
     with microphone as source:
-        print("...")
+        print("Pode falar...")
         audio = recognizer.listen(source, timeout=0)
 
     try:
         text = recognizer.recognize_google(audio, language="pt-BR")
-        print(".")
+        print("Texto reconhecido: {}".format(text))
         return text.lower()
     except sr.UnknownValueError:
         print("Não foi possível entender o áudio.")
