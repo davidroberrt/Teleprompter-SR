@@ -10,7 +10,6 @@ Está sendo criado de acordo com a realidade da TV, que atualmente existem pesso
 - Utiliza a biblioteca SpeechRecognition para capturar a fala do usuário.
 - Funciona com o reconhecimento de fala em português.
 
-## Como Usar
+## Futuros upgrades
 
-1. Clone o repositório para o seu ambiente local:
-
+1. Atualmente está na sua fase inicial, mas será criado tanto para web, quanto para desktop e mobile. Sendo assim, terá interface visual.
