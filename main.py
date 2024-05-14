@@ -1,23 +1,14 @@
 import speech_recognition as sr
-import time
 
-def display_text(text):
-    print(text)
-
-def listen_for_speech():
-    # Inicializa o reconhecedor de fala
-    recognizer = sr.Recognizer()
-
-    # Configura o microfone como a fonte de áudio
-    with sr.Microphone() as source:
-        print("Por favor, fale...")
-        recognizer.adjust_for_ambient_noise(source)  # Ajusta para o ruído ambiente
-        audio = recognizer.listen(source, timeout=5)  # Escuta até 5 segundos de áudio
+def listen_for_speech(recognizer, microphone):
+    with microphone as source:
+        print("...")
+        audio = recognizer.listen(source, timeout=0)
 
     try:
-        # Usa o reconhecedor de fala para converter o áudio em texto
         text = recognizer.recognize_google(audio, language="pt-BR")
-        return text
+        print(".")
+        return text.lower()
     except sr.UnknownValueError:
         print("Não foi possível entender o áudio.")
         return ""
@@ -25,27 +16,30 @@ def listen_for_speech():
         print(f"Erro no serviço de reconhecimento de fala: {e}")
         return ""
 
-def teleprompter(text):
-    lines = text.split('\n')
-    num_lines = len(lines)
-    current_line = 0
+def display_text(current_text):
+    print(current_text)
+def main():
+    recognizer = sr.Recognizer()
+    microphone = sr.Microphone()
 
-    while current_line < num_lines:
-        display_text('\n'.join(lines[current_line:]))
-        time.sleep(1)  # Aguarda um segundo
+    # Trechos do teleprompter
+    trechos = [
+        "Olá e bem-vindo ao nosso teleprompter de notícias",
+        "Hoje as principais notícias são",
+        "Lançamento do novo produto da empresa",
+        "Previsão do tempo para o final de semana",
+        "Fique atento para mais notícias ao longo do dia."
+    ]
 
-        # Captura a fala do usuário
-        spoken_text = listen_for_speech().lower()
+    current_trecho = 0
 
-        # Verifica se a fala do usuário corresponde à linha atual do teleprompter
-        if spoken_text in lines[current_line].lower():
-            current_line += 1
+    print("Bem-vindo ao Teleprompter de Texto")
 
-# Texto do teleprompter
-text = """Olá! Bem-vindo ao Teleprompter de Fala.
-Aqui ficará as notícias...
-Pressione Ctrl+C para sair.
-Por momento será via terminal, mas irei atualizar para GUI Interface"""
+    while current_trecho < len(trechos):
+        display_text(trechos[current_trecho])
+        spoken_text = listen_for_speech(recognizer, microphone)
+        if spoken_text and spoken_text == trechos[current_trecho].lower():
+            current_trecho += 1
 
-# Chama a função do teleprompter com o texto
-teleprompter(text)
+if __name__ == "__main__":
+    main()
